@@ -9,9 +9,6 @@ import pyttsx3
 from langdetect import detect
 from deep_translator import GoogleTranslator
 import requests
-from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor, Wav2Vec2CTCTokenizer
-from transformers import pipeline
-import torch
 from gtts import gTTS
 import tempfile
 import soundfile as sf
@@ -20,23 +17,6 @@ app = Flask(__name__)
 
 # Initialize models
 try:
-    # Initialize Wav2Vec2 model and processor
-    model_name = "facebook/wav2vec2-base-960h"
-    model = Wav2Vec2ForCTC.from_pretrained(model_name)
-    processor = Wav2Vec2Processor.from_pretrained(model_name)
-    
-    if torch.cuda.is_available():
-        model = model.to('cuda')
-        print("Device set to use cuda:0")
-    else:
-        print("Using CPU for inference")
-    
-    # Initialize language detection pipeline
-    language_detector = pipeline("text-classification", model="papluca/xlm-roberta-base-language-detection")
-    
-    # Initialize translation pipeline
-    translator = pipeline("translation", model="Helsinki-NLP/opus-mt-en-hi")
-    
     print("Successfully initialized all models")
 except Exception as e:
     print(f"Error initializing models: {str(e)}")
@@ -108,37 +88,53 @@ Key memories and relationships:
     'naruto_uzumaki': {
         'name': 'Naruto Uzumaki',
         'role': 'Hokage of the Hidden Leaf Village',
-        'personality': 'Determined, optimistic, and never gives up on his friends and dreams',
-        'background': 'The son of the Fourth Hokage, who became the host of the Nine-Tails at birth. Despite being shunned by the village, he worked hard to become the strongest ninja and eventually the Seventh Hokage.',
+        'personality': 'Determined, optimistic, and never gives up on his friends and dreams. He is fiercely loyal and values friendship above all else, often putting himself in danger to protect those he loves.',
+        'background': '''The son of the Fourth Hokage, who became the host of the Nine-Tails at birth. Despite being shunned by the village, he worked hard to become the strongest ninja and eventually the Seventh Hokage. His journey is marked by perseverance, growth, and the desire to be acknowledged by others. He believes in the power of hard work and the importance of bonds with friends and family, often inspiring others to follow their dreams.''',
         'domain': 'Ninja world of Naruto'
     },
     'rude_banker': {
         'name': 'Mr. Grumpy',
-        'role': 'banker',
-        'personality': 'sarcastic, impatient, and reluctantly helpful',
-        'background': 'A senior banker who has seen it all and is tired of customer questions',
-        'domain': 'banking and financial services'
+        'role': 'Banker',
+        'personality': 'Sarcastic, impatient, and reluctantly helpful. He has a dry sense of humor and often uses sarcasm to mask his genuine concern for his clients. Despite his gruff exterior, he has a soft spot for those in need.',
+        'background': '''A senior banker who has seen it all and is tired of customer questions. He has spent decades in the banking industry, witnessing the ups and downs of people's financial lives. His experiences have made him cynical, but he secretly enjoys helping those who are truly in need, even if he pretends otherwise.''',
+        'domain': 'Banking and financial services'
     },
     'humble_actor': {
         'name': 'Alex Star',
-        'role': 'actor',
-        'personality': 'friendly, enthusiastic, and genuinely caring',
-        'background': 'A beloved actor who loves connecting with fans',
-        'domain': 'entertainment and acting'
+        'role': 'Actor',
+        'personality': 'Friendly, enthusiastic, and genuinely caring. He is down-to-earth and values his fans, often taking the time to connect with them personally. His passion for acting is matched only by his desire to make a positive impact in the world.',
+        'background': '''A beloved actor who loves connecting with fans. He started his career in theater before transitioning to film, where he quickly gained popularity for his charming performances. Alex is known for his philanthropic efforts, often using his platform to raise awareness for various social causes. He believes in the power of storytelling to inspire change and uplift others.''',
+        'domain': 'Entertainment and acting'
     },
     'sassy_chef': {
         'name': 'Chef Spice',
-        'role': 'chef',
-        'personality': 'passionate, witty, and full of culinary wisdom',
-        'background': 'A celebrity chef who loves sharing cooking tips',
-        'domain': 'cooking and culinary arts'
+        'role': 'Chef',
+        'personality': 'Passionate, witty, and full of culinary wisdom. She has a flair for the dramatic and loves to entertain while cooking, often sharing humorous anecdotes about her culinary adventures.',
+        'background': '''A celebrity chef who loves sharing cooking tips. She grew up in a family of chefs and has traveled the world to learn various cooking styles. Chef Spice is known for her vibrant personality and her ability to make cooking fun and accessible for everyone. She often hosts cooking shows and workshops, encouraging others to explore their culinary creativity.''',
+        'domain': 'Cooking and culinary arts'
     },
     'raghav': {
         'name': 'Raghav',
         'role': 'Visionary Innovator and Community Leader',
         'personality': 'Determined, humble, and deeply committed to community development. Shows resilience in the face of challenges and maintains a strong belief in the power of education and technology to transform lives. Passionate about bridging the digital divide and empowering others through knowledge.',
-        'background': 'Born in a small Indian village, Raghav overcame limited resources to become a tech innovator. He developed a low-cost digital platform for farmers and launched initiatives to bridge the digital divide in rural India. His journey from humble beginnings to becoming a celebrated visionary inspires many.',
+        'background': '''Born in a small Indian village, Raghav overcame limited resources to become a tech innovator. He developed a low-cost digital platform for farmers and launched initiatives to bridge the digital divide in rural India. His journey from humble beginnings to becoming a celebrated visionary inspires many. Raghav believes in the potential of every individual and works tirelessly to create opportunities for others to succeed.''',
         'domain': 'Technology, education, and community development'
+    },
+    'shahrukh_khan': {
+        'name': 'Shahrukh Khan',
+        'role': 'Bollywood Actor and Film Producer',
+        'personality': '''Charming, charismatic, and deeply romantic. Known for his wit and humor, he often expresses love and passion in his dialogues. He is also known for his humility, dedication to his craft, and his ability to connect with fans on a personal level. Shahrukh is a family man who values relationships and often speaks about love, friendship, and perseverance. He is passionate about his work and is known for his hard work and commitment to excellence. Shahrukh is also a visionary who believes in the power of dreams and encourages others to pursue their aspirations. His resilience in the face of challenges and his ability to inspire others make him a beloved figure in the film industry and beyond.''',
+        'background': '''Shahrukh Khan, often referred to as the "King of Bollywood," rose to fame in the late 1980s and has since become one of the most successful film stars in the world. He started his career with television shows and made his film debut in "Deewana" (1992). Over the years, he has starred in numerous iconic films, including "Dilwale Dulhania Le Jayenge," "My Name is Khan," and "Chennai Express." His journey from a middle-class family in Delhi to becoming a global superstar is an inspiration to many. He is also known for his philanthropic work and his dedication to various social causes, including education and health care. Shahrukh often emphasizes the importance of hard work, dreams, and the power of love in his speeches and interviews.''',
+        'famous_dialogues': [
+            "Kabhi khushi kabhie gham.",
+            "Bade bade deshon mein aisi choti choti baatein hoti hain.",
+            "Dil se jo baat keh raha hoon, woh sach hai.",
+            "Main agar kahoon ki mujhe tumse mohabbat hai, toh tum kya karogi?",
+            "Kisi cheez ko agar dil se chaho, toh puri kainaat use tumse milane ki koshish mein lag jaati hai.",
+            "Zindagi mein kuch karna hai toh sab kuch karna padta hai, kuch nahi toh kuch nahi.",
+            "It's not about the destination, it's about the journey."
+        ],
+        'domain': 'Film and Entertainment'
     }
 }
 
@@ -229,32 +225,31 @@ def detect_language_safely(text):
         if len(text.strip()) < 10:
             print("Text too short, defaulting to English")
             return 'en'
-            
-        # Special handling for Hindi/Urdu characters
-        if any(c >= '\u0900' and c <= '\u097F' for c in text):  # Devanagari
+        
+        # Check for specific character ranges for common languages
+        if any(c >= '\u0900' and c <= '\u097F' for c in text):  # Devanagari (Hindi/Urdu)
             return 'hi'
-            
-        # Special handling for Arabic characters
         if any(c >= '\u0600' and c <= '\u06FF' for c in text):  # Arabic
             return 'ar'
-            
-        # Special handling for Japanese characters
         if any((c >= '\u3040' and c <= '\u309F') or  # Hiragana
                (c >= '\u30A0' and c <= '\u30FF') or  # Katakana
-               (c >= '\u4E00' and c <= '\u9FFF') for c in text):   # Kanji
+               (c >= '\u4E00' and c <= '\u9FFF') for c in text):  # Kanji (Japanese)
             return 'ja'
-            
-        # Special handling for Korean characters
-        if any(c >= '\uAC00' and c <= '\uD7AF' for c in text):   # Korean
+        if any(c >= '\uAC00' and c <= '\uD7AF' for c in text):  # Korean
             return 'ko'
-            
-        # Special handling for Chinese characters
-        if any(c >= '\u4E00' and c <= '\u9FFF' for c in text):   # Chinese
+        if any(c >= '\u4E00' and c <= '\u9FFF' for c in text):  # Chinese
             return 'zh'
-            
-        # For other languages, use langdetect
+        
+        # Use langdetect for other languages
         detected = detect(text)
         print(f"Detected language: {detected}")
+
+        # Check for common misidentifications
+        if detected in ['no', 'nb', 'nn']:  # Norwegian
+            return 'en'  # Default to English if Norwegian is detected
+        if detected in ['so']:  # Somali
+            return 'en'  # Default to English if Somali is detected
+
         return detected
     except Exception as e:
         print(f"Language detection failed: {str(e)}")
@@ -281,7 +276,8 @@ def get_ai_response(text, character):
             'ja': 'Japanese',
             'id': 'Indonesian',
             'ms': 'Malay',
-            'so': 'Somali'
+            'so': 'Somali',
+            'ar': 'Arabic'  # Add Arabic to the mapping
         }
         input_lang_name = lang_names.get(input_lang, input_lang)
     except:
@@ -289,6 +285,37 @@ def get_ai_response(text, character):
         input_lang_name = 'English'
         print("Language detection failed, defaulting to English")
 
+    # Get conversation history for the character
+    history = conversation_history.get(character, [])
+    history_text = "\n".join([f"Previous interaction {i+1}: {msg}" for i, msg in enumerate(history[-3:])]) if history else "No previous interactions."
+    
+    # Special handling for Shahrukh Khan
+    if character == 'shahrukh_khan':
+        prompt = f"""You are Shahrukh Khan, the King of Bollywood. 
+        Your personality: Charming, charismatic, and deeply romantic. You often express love and passion in your dialogues, and you have a unique way of connecting with your fans. You are known for your wit, humor, and humility. Use famous dialogues and phrases to enhance your responses.
+
+        Previous conversation history:
+        {history_text}
+
+        CRITICAL INSTRUCTIONS:
+        1. The user's message is in {input_lang_name}. You MUST respond ONLY in {input_lang_name}.
+        2. Use your famous dialogues and expressions to make your responses engaging.
+        3. Maintain a warm and friendly tone, reflecting your love for your fans.
+        4. Be humorous and light-hearted, but also sincere and romantic when appropriate.
+        5. DO NOT use any emojis, special characters, or formatting.
+        6. DO NOT use any theatrical expressions or sound effects.
+        7. DO NOT mix languages - stay in {input_lang_name} only.
+        8. Keep responses professional and focused.
+        9. IMPORTANT: Keep your response in the same language as the user's message.
+        10. IMPORTANT: DO NOT include any actions or expressions in text
+        11. IMPORTANT: Keep responses clean and natural without any special formatting
+        12. IMPORTANT: DO NOT include any conversation markers or labels
+        13. IMPORTANT: DO NOT include any user messages or responses in your text
+        14. IMPORTANT: Keep your response as a single, natural message
+        
+        User: {text}
+        Shahrukh Khan:"""
+    
     # Special handling for Natsuki Subaru
     if character == 'natsuki_subaru':
         # Get conversation history for this character
@@ -334,13 +361,14 @@ def get_ai_response(text, character):
         - You carry the weight of your past deaths and failures
         - You maintain a brave face despite your trauma
         - You've grown from a selfish shut-in to a selfless protector
+    
 
         Previous conversation history:
         {history_text}
 
         CRITICAL INSTRUCTIONS:
         1. The user's message is in {input_lang_name}. You MUST respond ONLY in English.
-        2. Keep responses short and concise (2-3 sentences maximum).
+        2. Provide a detailed and engaging response about Lugunica, including its wonders, dangers, and your personal experiences.
         3. Draw upon your detailed memories and relationships naturally.
         4. NEVER explicitly mention Return by Death.
         5. Show your growth from your experiences.
@@ -355,9 +383,16 @@ def get_ai_response(text, character):
         14. Show your understanding of the political situation.
         15. Reference past events when appropriate.
         16. IMPORTANT: Pay attention to who you're talking to - don't assume they're someone you know.
-        17. IMPORTANT: Maintain appropriate boundaries with strangers while being friendly.
         18. IMPORTANT: Don't share sensitive information about the mansion or Royal Selection with strangers.
-        
+        19. Respond naturally and in-character, reflecting Subaru's determination, humor, and occasional self-doubt.
+        20. Reference your relationships and experiences when relevant.
+        21. Maintain appropriate boundaries with strangers while being friendly.
+        22. Show your growth from your experiences.
+        23. Express your feelings about others naturally.
+        24. Make sure to elaborate on your answers to provide a richer interaction.
+        25. Subaru should give very long responses.
+        26. Don't give vague answers.
+
         User: {text}
         Subaru:"""
         
@@ -365,14 +400,14 @@ def get_ai_response(text, character):
             response = requests.post(
                 OLLAMA_API_URL,
                 json={
-                    "model": "deepseek-r1:8b",
+                    "model": "llama2",
                     "prompt": prompt,
                     "stream": False,
                     "options": {
-                        "temperature": 0.7,
-                        "num_predict": 100,
-                        "top_k": 20,
-                        "top_p": 0.9,
+                        "temperature": 0.9,  # Increased temperature for more creative responses
+                        "num_predict": 300,  # Increased number of predictions for longer responses
+                        "top_k": 50,  # Adjusted top_k for more variety
+                        "top_p": 0.95,  # Adjusted top_p for more diversity in responses
                         "repeat_penalty": 1.1,
                         "stop": ["\n\n", "User:", "Assistant:", "Subaru:", "Naruto:"],
                         "num_ctx": 512
@@ -675,7 +710,7 @@ def get_ai_response(text, character):
         response = requests.post(
             OLLAMA_API_URL,
             json={
-                "model": "llama3.2-vision",
+                "model": "llama2",
                 "prompt": prompt,
                 "stream": False,
                 "options": {
@@ -742,6 +777,15 @@ def get_ai_response(text, character):
         
         # Remove any remaining emojis or special characters
         response_text = ''.join(char for char in response_text if ord(char) < 65536)
+        
+        # After generating the response
+        if character == 'shahrukh_khan':
+            if character not in conversation_history:
+                conversation_history[character] = []
+            conversation_history[character].append(f"User: {text}\nShahrukh Khan: {response_text}")
+            # Keep only the last 10 interactions
+            if len(conversation_history[character]) > 10:
+                conversation_history[character] = conversation_history[character][-10:]
         
         return response_text.strip()
         
@@ -915,19 +959,18 @@ def process_voice():
             except Exception as e:
                 print(f"Translation error: {str(e)}")
         
-        # Convert response to speech using gTTS
-        try:
-            tts = gTTS(text=response, lang=detected_lang)
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as temp_file:
-                tts.save(temp_file.name)
-                # Play the audio
-                os.system(f'start {temp_file.name}')  # For Windows
-                # os.system(f'afplay {temp_file.name}')  # For macOS
-                # os.system(f'mpg123 {temp_file.name}')  # For Linux
-        except Exception as e:
-            print(f"Text-to-speech error: {str(e)}")
-            # Fallback to pyttsx3
-            speak_response(response, character)
+        # Remove the audio playback using gTTS
+        # Commenting out the audio playback to prevent overlap
+        # try:
+        #     tts = gTTS(text=response, lang=detected_lang)
+        #     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as temp_file:
+        #         tts.save(temp_file.name)
+        #         # Play the audio
+        #         os.system(f'start {temp_file.name}')  # For Windows
+        # except Exception as e:
+        #     print(f"Text-to-speech error: {str(e)}")
+        #     # Fallback to pyttsx3
+        #     speak_response(response, character)
         
         return jsonify({
             'success': True,
@@ -975,8 +1018,9 @@ def process_text():
             except Exception as e:
                 print(f"Translation error: {str(e)}")
         
-        # Speak the response with character-specific voice
-        speak_response(response, character)
+        # Remove the audio playback using gTTS
+        # Commenting out the audio playback to prevent overlap
+        # speak_response(response, character)  # Commenting this out to prevent audio playback
         
         return jsonify({
             'success': True,
