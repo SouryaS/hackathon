@@ -1,0 +1,448 @@
+/* Main styles */
+:root {
+    --primary-color: #8B5CF6;
+    --secondary-color: #EC4899;
+    --background-color: #F0FDFA;
+    --card-background: rgba(255, 255, 255, 0.95);
+    --text-primary: #1E293B;
+    --text-secondary: #475569;
+    --shadow-sm: 0 2px 4px 0 rgba(139, 92, 246, 0.15);
+    --shadow-md: 0 4px 8px -2px rgba(139, 92, 246, 0.2);
+    --shadow-lg: 0 12px 24px -4px rgba(139, 92, 246, 0.25);
+    --gradient-primary: linear-gradient(135deg, #8B5CF6, #EC4899);
+    --gradient-hover: linear-gradient(135deg, #7C3AED, #DB2777);
+    --animation-bounce: bounce 0.5s ease infinite;
+    --animation-wiggle: wiggle 1s ease-in-out infinite;
+    --animation-float: float 3s ease-in-out infinite;
+}
+
+body {
+    background: linear-gradient(135deg, #a5f3fc, #bae6fd, #c7d2fe, #ddd6fe, #f5d0fe);
+    background-size: 500% 500%;
+    animation: gradientBG 20s ease infinite;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header styles */
+.main-title {
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    letter-spacing: -0.025em;
+}
+
+/* Character cards */
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.character-card {
+    background: var(--card-background);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+}
+
+.character-card:hover {
+    transform: translateY(-5px) rotate(1deg);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+    animation: var(--animation-wiggle);
+}
+
+.character-card.selected {
+    border: 3px solid transparent;
+    background: linear-gradient(var(--card-background), var(--card-background)) padding-box,
+                var(--gradient-primary) border-box;
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px -10px rgba(139, 92, 246, 0.4);
+    animation: cardGlow 2s ease-in-out infinite;
+}
+
+.character-card.selected .character-name {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.character-card.selected .character-role,
+.character-card.selected .character-personality {
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+@keyframes cardGlow {
+    0%, 100% {
+        box-shadow: 0 15px 30px -10px rgba(139, 92, 246, 0.4);
+    }
+    50% {
+        box-shadow: 0 20px 40px -15px rgba(139, 92, 246, 0.6);
+    }
+}
+
+.character-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.character-role {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.character-personality {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* Voice interface */
+.voice-interface {
+    background: var(--card-background);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+
+.btn-primary:hover {
+    background: var(--gradient-hover);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+    animation: var(--animation-bounce);
+}
+
+.btn-secondary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+    opacity: 0.9;
+}
+
+.btn-secondary:hover {
+    background: var(--gradient-hover);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+    opacity: 1;
+}
+
+/* Text input */
+.text-input-section {
+    margin-bottom: 1.5rem;
+}
+
+.text-input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.text-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #E5E7EB;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.text-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+/* Conversation */
+.conversation {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: rgba(249, 250, 251, 0.8);
+    box-shadow: var(--shadow-lg);
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.conversation::-webkit-scrollbar {
+    width: 8px;
+}
+
+.conversation::-webkit-scrollbar-track {
+    background: rgba(249, 250, 251, 0.5);
+    border-radius: 10px;
+}
+
+.conversation::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+}
+
+.conversation::-webkit-scrollbar-thumb:hover {
+    background: var(--gradient-hover);
+}
+
+.message {
+    padding: 1.25rem;
+    border-radius: 1.5rem;
+    margin-bottom: 1.5rem;
+    max-width: 80%;
+    box-shadow: var(--shadow-md);
+    animation: messageSlide 0.3s ease-out forwards, messagePulse 2s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+@keyframes messagePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.message-user {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    margin-left: auto;
+    box-shadow: var(--shadow-lg);
+    transform-origin: bottom right;
+}
+
+.message-user::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    clip-path: polygon(0 0, 0% 100%, 100% 100%);
+}
+
+.message-assistant {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    margin-right: auto;
+    transform-origin: bottom left;
+    backdrop-filter: blur(5px);
+}
+
+.message-assistant::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    clip-path: polygon(0 100%, 100% 100%, 100% 0);
+    border-left: 2px solid rgba(139, 92, 246, 0.2);
+}
+
+.message-sender {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.message-content {
+    line-height: 1.7;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    word-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.message:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-lg);
+}
+
+@keyframes messageSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-user {
+    background: #EEF2FF;
+    margin-left: auto;
+}
+
+.message-assistant {
+    background: #F3F4F6;
+}
+
+.message-sender {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.message-content {
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+/* Status */
+.status {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 1rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(1deg); }
+    75% { transform: rotate(-1deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 50% 100%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 50% 0%; }
+    100% { background-position: 0% 50%; }
+}
+
+.message {
+    animation: float 0.5s ease-out;
+}
+
+.btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.recording {
+    animation: var(--animation-pulse);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+}
+
+.recording {
+    animation: pulse 1.5s infinite;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .text-input-group {
+        flex-direction: column;
+    }
+}
+
+.message-timestamp {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    color: rgba(75, 85, 99, 0.9);
+    font-weight: 500;
+    letter-spacing: 0.025em;
+}
+
+.message-user .message-timestamp {
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.message-assistant .message-timestamp {
+    color: var(--text-secondary);
+    opacity: 0.8;
+}

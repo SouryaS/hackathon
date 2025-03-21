@@ -4,233 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Voice Assistant</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        .character-card {
-            transition: transform 0.2s;
-        }
-        .character-card:hover {
-            transform: translateY(-5px);
-        }
-        .recording {
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">AI Voice Assistant</h1>
+<body>
+    <div class="container">
+        <h1 class="main-title">AI Voice Assistant</h1>
         
         <!-- Character Selection -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="character-grid">
             {% for key, character in characters.items() %}
-            <div class="character-card bg-white rounded-lg shadow-lg p-6 cursor-pointer" onclick="selectCharacter('{{ key }}')">
-                <h2 class="text-2xl font-semibold mb-2">{{ character.name }}</h2>
-                <p class="text-gray-600 mb-2">{{ character.role }}</p>
-                <p class="text-sm text-gray-500">{{ character.personality }}</p>
+            <div class="character-card" onclick="selectCharacter('{{ key }}', event)">
+                <h2 class="character-name">{{ character.name }}</h2>
+                <p class="character-role">{{ character.role }}</p>
+                <p class="character-personality">{{ character.personality }}</p>
             </div>
             {% endfor %}
         </div>
 
         <!-- Voice Interface -->
-        <div class="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
-            <div class="text-center mb-6 space-y-4">
-                <div class="flex justify-center space-x-4">
-                    <button id="startRecording" class="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-colors">
-                        Start Recording
-                    </button>
-                    <button id="toggleTextInput" class="bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition-colors">
-                        Type Instead
-                    </button>
-                </div>
-                
-                <!-- Text Input Section (Initially Hidden) -->
-                <div id="textInputSection" class="hidden">
-                    <div class="flex space-x-2">
-                        <input type="text" id="textInput" 
-                               class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                               placeholder="Type your message here...">
-                        <button id="sendText" 
-                                class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                            Send
-                        </button>
+        <div class="voice-interface">
+            <div class="interface-container">
+                <div class="controls-section">
+                    <div class="button-group">
+                        <button id="startRecording" class="btn btn-primary" aria-label="Start voice recording">Start Recording</button>
+                        <button id="toggleTextInput" class="btn btn-secondary" aria-label="Switch to text input">Type Instead</button>
                     </div>
+                    
+                    <!-- Text Input Section (Initially Hidden) -->
+                    <div id="textInputSection" class="text-input-section hidden" aria-hidden="true">
+                        <div class="text-input-group">
+                            <input type="text" id="textInput" class="text-input" placeholder="Type your message here..." aria-label="Message input field">
+                            <button id="sendText" class="btn btn-primary" aria-label="Send message">Send</button>
+                        </div>
+                    </div>
+
+                    <!-- Status Indicator -->
+                    <div id="status" class="status" role="status" aria-live="polite"></div>
+                </div>
+
+                <!-- Conversation Display -->
+                <div id="conversation" class="conversation" role="log" aria-label="Conversation history">
+                    <!-- Messages will be dynamically added here -->
                 </div>
             </div>
-
-            <!-- Conversation Display -->
-            <div id="conversation" class="space-y-4 mb-6">
-                <!-- Messages will be added here -->
-            </div>
-
-            <!-- Status -->
-            <div id="status" class="text-center text-gray-600"></div>
         </div>
     </div>
 
+    <script src="/static/main.js"></script>
     <script>
-        // Make CHARACTERS available in JavaScript
-        const CHARACTERS = {{ characters | tojson | safe }};
-        
-        let selectedCharacter = 'humble_actor';
-        let isRecording = false;
-        let isTextInputMode = false;
-
-        function selectCharacter(character) {
-            selectedCharacter = character;
-            document.querySelectorAll('.character-card').forEach(card => {
-                card.classList.remove('ring-2', 'ring-blue-500');
-            });
-            event.currentTarget.classList.add('ring-2', 'ring-blue-500');
-        }
-
-        function toggleTextInput() {
-            isTextInputMode = !isTextInputMode;
-            const textInputSection = document.getElementById('textInputSection');
-            const startRecording = document.getElementById('startRecording');
-            const toggleTextInput = document.getElementById('toggleTextInput');
-            
-            if (isTextInputMode) {
-                textInputSection.classList.remove('hidden');
-                startRecording.classList.add('hidden');
-                toggleTextInput.textContent = 'Use Voice Instead';
-                toggleTextInput.classList.remove('bg-green-500', 'hover:bg-green-600');
-                toggleTextInput.classList.add('bg-blue-500', 'hover:bg-blue-600');
-            } else {
-                textInputSection.classList.add('hidden');
-                startRecording.classList.remove('hidden');
-                toggleTextInput.textContent = 'Type Instead';
-                toggleTextInput.classList.remove('bg-blue-500', 'hover:bg-blue-600');
-                toggleTextInput.classList.add('bg-green-500', 'hover:bg-green-600');
-            }
-        }
-
-        async function sendText() {
-            const textInput = document.getElementById('textInput');
-            const text = textInput.value.trim();
-            const status = document.getElementById('status');
-            
-            if (!text) return;
-            
-            try {
-                status.textContent = 'Processing...';
-                addMessage('You', text, 'user');  // Add user message immediately
-                textInput.value = ''; // Clear input right away
-                
-                const response = await fetch('/process_text', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `text=${encodeURIComponent(text)}&character=${selectedCharacter}`
-                });
-
-                const data = await response.json();
-                console.log('Response data:', data);  // Log the response data
-                
-                if (data.success) {
-                    addMessage(CHARACTERS[selectedCharacter].name, data.response, 'assistant');
-                    speakResponse(data.response);
-                    status.textContent = '';
-                } else {
-                    console.error('Error from server:', data.error);  // Log the error
-                    status.textContent = 'Error: ' + (data.error || 'Unknown error');
-                }
-            } catch (error) {
-                console.error('Error:', error);  // Log any errors
-                status.textContent = 'Error processing text: ' + error.message;
-            }
-        }
-
-        async function startRecording() {
-            try {
-                const button = document.getElementById('startRecording');
-                const status = document.getElementById('status');
-                if (isRecording) return;
-
-                button.textContent = 'Recording...';
-                button.classList.add('recording');
-                button.disabled = true;
-                isRecording = true;
-
-                // Add countdown timer
-                let timeLeft = 10;
-                const countdownInterval = setInterval(() => {
-                    status.textContent = `Recording... ${timeLeft} seconds left`;
-                    timeLeft--;
-                    if (timeLeft < 0) {
-                        clearInterval(countdownInterval);
-                    }
-                }, 1000);
-
-                // Send request to start recording
-                const response = await fetch('/process_voice', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `character=${selectedCharacter}`
-                });
-
-                const data = await response.json();
-                clearInterval(countdownInterval);
-                
-                if (data.success) {
-                    status.textContent = 'Processing...';
-                    addMessage('You', data.text, 'user');  // Add user message immediately
-                    addMessage(CHARACTERS[selectedCharacter].name, data.response, 'assistant');
-                    speakResponse(data.response);
-                    status.textContent = '';
-                } else {
-                    status.textContent = 'Error: ' + (data.error || 'Unknown error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('status').textContent = 'Error processing audio';
-            } finally {
-                const button = document.getElementById('startRecording');
-                button.textContent = 'Start Recording';
-                button.classList.remove('recording');
-                button.disabled = false;
-                isRecording = false;
-            }
-        }
-
-        function addMessage(sender, text, type) {
-            const conversation = document.getElementById('conversation');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `p-4 rounded-lg ${type === 'user' ? 'bg-blue-100 ml-auto' : 'bg-gray-100'} max-w-[80%]`;
-            messageDiv.innerHTML = `
-                <div class="font-semibold text-sm mb-1">${sender}</div>
-                <div class="text-gray-800">${text}</div>
-            `;
-            conversation.appendChild(messageDiv);
-            conversation.scrollTop = conversation.scrollHeight;
-        }
-
-        function speakResponse(text) {
-            try {
-                const utterance = new SpeechSynthesisUtterance(text);
-                window.speechSynthesis.speak(utterance);
-            } catch (error) {
-                console.error('Error speaking response:', error);
-            }
-        }
-
-        // Initialize
-        document.getElementById('startRecording').onclick = startRecording;
-        document.getElementById('toggleTextInput').onclick = toggleTextInput;
-        document.getElementById('sendText').onclick = sendText;
-        document.getElementById('textInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendText();
-            }
-        });
+        initializeCharacters({{ characters | tojson | safe }});
     </script>
 </body>
-</html> 
+</html>
