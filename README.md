@@ -53,6 +53,41 @@ Say hello to our delightful AI personalities!
    - Explains complex topics with clarity
    - Encourages learning with gentle guidance
 
+4. **🌟 Natsuki Subaru**
+   - A determined and resilient character from another world
+   - Faces challenges with unwavering spirit
+   - Known for his ability to never give up
+
+5. **🍜 Naruto Uzumaki**
+   - An energetic ninja with boundless enthusiasm
+   - Believes in the power of friendship and perseverance
+   - Dreams of becoming the greatest Hokage
+
+6. **😠 Mr. Grumpy**
+   - A lovably cantankerous personality
+   - Offers brutally honest opinions with a hidden soft side
+   - Expert at finding flaws in everything
+
+7. **🚀 Alex Star**
+   - An adventurous space explorer
+   - Shares fascinating stories about cosmic discoveries
+   - Brings scientific wonder to every conversation
+
+8. **👨‍🍳 Chef Spice**
+   - A passionate culinary expert with a zest for life
+   - Sprinkles cooking wisdom into every conversation
+   - Makes everything taste better with humor
+
+9. **🎭 Raghav**
+   - A charismatic storyteller with a flair for drama
+   - Blends traditional wisdom with modern wit
+   - Makes every conversation an entertaining performance
+
+10. **🎬 Shahrukh Khan**
+    - The charming "King of Bollywood"
+    - Brings romance and drama to every interaction
+    - Known for his wit, charm, and signature style
+
 ## 🛠️ Technologies Used
 
 [![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask)](https://flask.palletsprojects.com/)
