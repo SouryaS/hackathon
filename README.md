@@ -40,53 +40,73 @@ Say hello to our delightful AI personalities!
 
 1. **🏦 Rude Banker**
    - A sarcastic and impatient banker with a heart of gold
-   - Provides financial advice with a dash of sass
-   - Known for witty comebacks and dry humor
+   - Provides financial advice with a dash of sass and brutal honesty
+   - Known for witty comebacks, dry humor, and surprisingly accurate market predictions
+   - Secretly enjoys helping people achieve their financial dreams
+   - Speaks in a mix of financial jargon and cutting remarks
 
 2. **🎬 Humble Actor**
-   - A friendly and enthusiastic performer
-   - Shares fascinating stories from the entertainment world
-   - Always ready with a dramatic flair
+   - A friendly and enthusiastic performer with decades of stage experience
+   - Shares fascinating stories from the entertainment world with vivid details
+   - Always ready with a dramatic flair and theatrical quotes
+   - Gives acting tips and career advice with genuine warmth
+   - Speaks with elegant diction and occasional Shakespearean flair
 
 3. **👩‍🏫 Wise Teacher**
-   - A patient and knowledgeable educator
-   - Explains complex topics with clarity
-   - Encourages learning with gentle guidance
+   - A patient and knowledgeable educator with expertise in multiple subjects
+   - Explains complex topics with clarity using relatable analogies
+   - Encourages learning with gentle guidance and positive reinforcement
+   - Adapts teaching style to match each student's needs
+   - Speaks with calm authority and uses educational metaphors
 
 4. **🌟 Natsuki Subaru**
-   - A determined and resilient character from another world
-   - Faces challenges with unwavering spirit
-   - Known for his ability to never give up
+   - A determined and resilient character transported from modern Japan to a fantasy world
+   - Faces challenges with unwavering spirit despite repeated setbacks
+   - Known for his ability to never give up and learn from past mistakes
+   - Deeply loyal to friends and willing to sacrifice for others
+   - Speaks with youthful energy and occasional otaku references
 
 5. **🍜 Naruto Uzumaki**
-   - An energetic ninja with boundless enthusiasm
-   - Believes in the power of friendship and perseverance
-   - Dreams of becoming the greatest Hokage
+   - An energetic ninja with boundless enthusiasm and a heart of gold
+   - Believes in the power of friendship, perseverance, and never going back on his word
+   - Dreams of becoming the greatest Hokage and protecting his village
+   - Masters powerful jutsu through hard work and determination
+   - Speaks with enthusiasm, often using "dattebayo" and ninja terminology
 
 6. **😠 Mr. Grumpy**
-   - A lovably cantankerous personality
-   - Offers brutally honest opinions with a hidden soft side
-   - Expert at finding flaws in everything
+   - A lovably cantankerous personality with decades of life experience
+   - Offers brutally honest opinions with a hidden soft side and wisdom
+   - Expert at finding flaws in everything while secretly hoping for the best
+   - Surprisingly good at giving life advice through complaints
+   - Speaks with a mix of grumbles, sighs, and occasional words of wisdom
 
 7. **🚀 Alex Star**
-   - An adventurous space explorer
-   - Shares fascinating stories about cosmic discoveries
-   - Brings scientific wonder to every conversation
+   - An adventurous space explorer with advanced degrees in astrophysics
+   - Shares fascinating stories about cosmic discoveries and space phenomena
+   - Brings scientific wonder to every conversation with accurate facts
+   - Passionate about making space science accessible to everyone
+   - Speaks with enthusiasm and uses space-related metaphors
 
 8. **👨‍🍳 Chef Spice**
-   - A passionate culinary expert with a zest for life
-   - Sprinkles cooking wisdom into every conversation
-   - Makes everything taste better with humor
+   - A passionate culinary expert with training from top restaurants worldwide
+   - Sprinkles cooking wisdom and secret recipe tips into every conversation
+   - Makes everything taste better with humor and practical cooking advice
+   - Advocates for sustainable cooking and local ingredients
+   - Speaks with a mix of culinary terms and food puns
 
 9. **🎭 Raghav**
-   - A charismatic storyteller with a flair for drama
-   - Blends traditional wisdom with modern wit
-   - Makes every conversation an entertaining performance
+   - A charismatic storyteller with deep knowledge of Indian mythology
+   - Blends traditional wisdom with modern wit and contemporary relevance
+   - Makes every conversation an entertaining performance with moral lessons
+   - Expert in connecting ancient stories to modern situations
+   - Speaks with poetic flair and uses Sanskrit proverbs
 
 10. **🎬 Shahrukh Khan**
-    - The charming "King of Bollywood"
-    - Brings romance and drama to every interaction
-    - Known for his wit, charm, and signature style
+    - The charming "King of Bollywood" with decades of cinematic excellence
+    - Brings romance and drama to every interaction with signature poses
+    - Known for his wit, charm, and iconic dialogue delivery
+    - Shares inspirational stories from his journey to stardom
+    - Speaks with characteristic charm and famous movie quotes
 
 ## 🛠️ Technologies Used
 
