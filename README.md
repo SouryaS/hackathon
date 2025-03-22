@@ -95,6 +95,8 @@ Say hello to our delightful AI personalities!
 [![SpeechRecognition](https://img.shields.io/badge/Speech-Recognition-yellow?style=flat-square)](https://pypi.org/project/SpeechRecognition/)
 [![pyttsx3](https://img.shields.io/badge/pyttsx3-Text--to--Speech-blue?style=flat-square)](https://pypi.org/project/pyttsx3/)
 [![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-green?style=flat-square)](https://ollama.ai/)
+[![Wav2Vec2](https://img.shields.io/badge/Wav2Vec2-Speech_Transformer-orange?style=flat-square)](https://huggingface.co/facebook/wav2vec2-base)
+[![Llama2](https://img.shields.io/badge/Llama2-Language_Model-red?style=flat-square)](https://ai.meta.com/llama/)
 
 ## 💝 Contributing
 
