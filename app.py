@@ -12,11 +12,17 @@ import requests
 from gtts import gTTS
 import tempfile
 import soundfile as sf
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+import torch
 
 app = Flask(__name__)
 
 # Initialize models
 try:
+    processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
+    model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
+    if torch.cuda.is_available():
+        model = model.to('cuda')
     print("Successfully initialized all models")
 except Exception as e:
     print(f"Error initializing models: {str(e)}")
@@ -1036,4 +1042,4 @@ def process_text():
         })
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)
